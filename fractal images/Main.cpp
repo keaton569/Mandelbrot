@@ -107,5 +107,3 @@ int main() {
 	cout << "finished" << endl;
 	return 0;
 }
-
-
