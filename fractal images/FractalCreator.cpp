@@ -15,6 +15,16 @@ using namespace std;
 
 namespace keatonProgram {
 
+
+	void FractalCreator::run(string name) {
+		
+		calculateIteration();
+		calculateTotalIterations();
+		drawFractal();
+		writeBitMap("test.bmp");
+	
+	}
+
 	FractalCreator::FractalCreator(int width, int height):
 		m_width(width),
 		m_height(height),
@@ -62,6 +72,9 @@ namespace keatonProgram {
 
 	void FractalCreator::drawFractal() {
 		
+		RGB startColor(0, 0, 0);
+		RGB endColor(255, 128, 128);
+		RGB colorDiff(endColor - startColor);
 
 		for (int x = 0; x < m_width; x++)
 		{
@@ -88,7 +101,9 @@ namespace keatonProgram {
 						hue += ((double)m_histogram[i]) / m_total;
 					}
 
-					green = pow(255, hue);
+					red = startColor.r + colorDiff.r * hue;
+					green = startColor.g + colorDiff.g * hue;
+					blue = startColor.b + colorDiff.b * hue;
 
 				}
 				m_bitmap.setPixel(x, y, red, green, blue);

@@ -10,6 +10,7 @@
 #include "Zoom.h"
 #include "ZoomList.h"
 #include "FractalCreator.h"
+#include "RGB.h"
 
 
 
@@ -20,16 +21,15 @@ using namespace keatonProgram;
 
 
 int main() {
+
+	
+
 	int height = 600;
 
 	FractalCreator fractalCreator(800,600);
 
-	fractalCreator.addZoom(Zoom(176, height - 44, .07));
-	fractalCreator.calculateIteration();
-	fractalCreator.calculateTotalIterations();
-	fractalCreator.drawFractal();
-	fractalCreator.writeBitMap("test.bmp");
-	   	 
+	fractalCreator.addZoom(Zoom(176, 44, .07));
+	fractalCreator.run("test.bmp");
 	
 
 	cout << "finished" << endl;
