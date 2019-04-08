@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <memory>
 #include <math.h>
+#include <vector>
 
 #include "Bitmap.h"
 #include "bitmapFileHeader.h"
@@ -31,22 +32,29 @@ namespace keatonProgram {
 
 		unique_ptr<int[]> m_histogram;
 		unique_ptr<int[]> m_fractal;
-	
-		
 
+		vector<int> m_ranges;
+		vector<RGB> m_colors;
+		vector<int> m_rangeTotals;
+
+		bool m_bGotFirstRange{false};
 
 	private:
 		void calculateIteration();
 		void drawFractal();
 		void writeBitMap(string filename);		
 		void calculateTotalIterations();
-
+		
 
 	public:
 		void run(string name);
+		void addRange(double rangeEnd, const RGB& rgb);
+		void calculateRangeTotals();
 		FractalCreator(int width, int height);
 		~FractalCreator();
 		void addZoom(const Zoom& zoom);
+
+		int getRange(int iterations) const;
 	};
 }
 

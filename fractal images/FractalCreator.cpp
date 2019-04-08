@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <memory>
 #include <math.h>
+#include <cassert>
 
 #include "Bitmap.h"
 #include "bitmapFileHeader.h"
@@ -20,9 +21,34 @@ namespace keatonProgram {
 		
 		calculateIteration();
 		calculateTotalIterations();
+		calculateRangeTotals();
 		drawFractal();
 		writeBitMap("test.bmp");
 	
+	}
+
+	void FractalCreator::addRange(double rangeEnd, const RGB& rgb) {
+		m_ranges.push_back(rangeEnd * Mandelbrot::MAX_ITERTAIONS);
+		m_colors.push_back(rgb);
+
+		if (m_bGotFirstRange)
+		{
+			m_rangeTotals.push_back(0);
+		}
+
+		m_bGotFirstRange = true;
+
+
+		
+	}
+
+	void FractalCreator::writeBitMap(string name) {
+		m_bitmap.write(name);
+	}
+
+	void FractalCreator::addZoom(const Zoom& zoom) {
+		m_zoomList.add(zoom);
+
 	}
 
 	FractalCreator::FractalCreator(int width, int height):
@@ -38,7 +64,6 @@ namespace keatonProgram {
 
 
 	}
-
 
 	FractalCreator::~FractalCreator()
 	{
@@ -69,11 +94,10 @@ namespace keatonProgram {
 		}
 	}		
 	
-
 	void FractalCreator::drawFractal() {
 		
 		RGB startColor(0, 0, 0);
-		RGB endColor(255, 128, 128);
+		RGB endColor(0, 0, 255);
 		RGB colorDiff(endColor - startColor);
 
 		for (int x = 0; x < m_width; x++)
@@ -112,16 +136,25 @@ namespace keatonProgram {
 
 	}
 
-	void FractalCreator::writeBitMap(string name) {
-		m_bitmap.write(name);
-	}
+	void FractalCreator::calculateRangeTotals() {
 
-	void FractalCreator::addZoom(const Zoom& zoom) {
-		m_zoomList.add(zoom);
+		int rangeIndex = 0;
+
+		for (int i = 0; i < Mandelbrot::MAX_ITERTAIONS; i++)
+		{
+			int pixels = m_histogram[i];
+
+
+			if (i >= m_ranges[rangeIndex + 1])
+			{
+				rangeIndex++;
+			}
+
+			m_rangeTotals[rangeIndex] += pixels;
+		}
 
 	}
 		
-
 	void FractalCreator::calculateTotalIterations() {
 		for (int i = 0; i < Mandelbrot::MAX_ITERTAIONS; i++)
 		{
@@ -129,7 +162,28 @@ namespace keatonProgram {
 
 		}
 		
+	}
+	
+	int FractalCreator::getRange(int iterations) const {
+		int range = 0;
+
+		for (int i = 0; i < m_ranges.size(); i++)
+		{
+			range = i;
+			if (m_ranges[i] > iterations)
+			{
+				break;
+			}
+
 		}
 
+		range--;
+
+		assert(range > -1);
+		assert(range < m_ranges.size());
+
+		return range;
 	}
+
+}
 		
