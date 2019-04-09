@@ -28,18 +28,16 @@ int main() {
 
 	FractalCreator fractalCreator(800,600);
 
-	cout << fractalCreator.getRange(200) << endl;
+	
 
-	fractalCreator.addRange(0.0, RGB(0, 0, 0));
+	fractalCreator.addRange(0.0, RGB(255, 0, 0));
 	fractalCreator.addRange(0.33, RGB(255,0,0));
-	fractalCreator.addRange(0.66, RGB(255, 255, 0));
-	fractalCreator.addRange(1.0, RGB(255, 255, 255));
+	fractalCreator.addRange(0.66, RGB(0, 255, 0));
+	fractalCreator.addRange(1.0, RGB(0, 255, 255));
 
 
-	cout << fractalCreator.getRange(200) << endl;
 
-
-	fractalCreator.addZoom(Zoom(176, 44, .07));
+	//fractalCreator.addZoom(Zoom(176, 44, .07));
 	fractalCreator.run("test.bmp");
 	
 

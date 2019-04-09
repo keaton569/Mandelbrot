@@ -118,21 +118,24 @@ namespace keatonProgram {
 	
 	void FractalCreator::drawFractal() {
 		
-		RGB startColor(0, 0, 0);
-		RGB endColor(0, 0, 255);
-		RGB colorDiff(endColor - startColor);
 
 		for (int x = 0; x < m_width; x++)
 		{
 			for (int y = 0; y < m_height; y++)
 			{
+				int iterations = m_fractal[y * m_width + x];
+				int range = getRange(iterations);
+				int rangeTotal = m_rangeTotals[range];
+				int rangeStart = m_ranges[range];
+
+				RGB& startColor = m_colors[range];
+				RGB& endColor = m_colors[range+1];
+				RGB colorDiff = endColor - startColor;
+
+
 				uint8_t red = 0;
 				uint8_t green = 0;
 				uint8_t blue = 0;
-
-
-				int iterations = m_fractal[y * m_width + x];
-
 
 
 				if (iterations != Mandelbrot::MAX_ITERTAIONS)
@@ -140,16 +143,16 @@ namespace keatonProgram {
 
 
 					uint8_t color = (uint8_t)(256 * (double)iterations / Mandelbrot::MAX_ITERTAIONS);
-					double hue = 0.0;
+					int totalPixels = 0;
 
-					for (int i = 0; i <= iterations; i++)
+					for (int i = rangeStart; i <= iterations; i++)
 					{
-						hue += ((double)m_histogram[i]) / m_total;
+						totalPixels += m_histogram[i];
 					}
 
-					red = startColor.r + colorDiff.r * hue;
-					green = startColor.g + colorDiff.g * hue;
-					blue = startColor.b + colorDiff.b * hue;
+					red = startColor.r + colorDiff.r * (double)totalPixels / rangeTotal;
+					green = startColor.g + colorDiff.g * (double)totalPixels / rangeTotal;
+					blue = startColor.b + colorDiff.b * (double)totalPixels / rangeTotal;
 
 				}
 				m_bitmap.setPixel(x, y, red, green, blue);
