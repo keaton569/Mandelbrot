@@ -36,6 +36,9 @@ int main() {
 	fractalCreator.addRange(1.0, RGB(255, 255, 255));
 
 
+	cout << fractalCreator.getRange(200) << endl;
+
+
 	fractalCreator.addZoom(Zoom(176, 44, .07));
 	fractalCreator.run("test.bmp");
 	

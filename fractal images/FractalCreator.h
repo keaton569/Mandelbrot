@@ -51,7 +51,6 @@ namespace keatonProgram {
 		void addRange(double rangeEnd, const RGB& rgb);
 		void calculateRangeTotals();
 		FractalCreator(int width, int height);
-		~FractalCreator();
 		void addZoom(const Zoom& zoom);
 
 		int getRange(int iterations) const;
